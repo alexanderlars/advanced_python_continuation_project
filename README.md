@@ -123,7 +123,7 @@ The model achieved an **$R^2$ score of 0.29** and a **MAE (Mean Absolute Error) 
 * **Context:** While an $R^2$ of 0.29 might seem low in other contexts, it is a reasonable result in social sciences when predicting complex human behavior only based on demographics.
 * **Constraints:**  Itentionally, prior grades (`G1`, `G2`) were excluded to force the model to predict based on background factors rather than past performance. Without these historic data points, the unexplained variance is naturally higher.
 * **Qualitative Validation:** The model aligns well with intuition, making logically sound predictions. It correctly identifies **absence** and **past failures** as significant negative drivers, while identifing positive factors such as **study time**, **parents' education**, and **moderated alcohol consumption**.
-* * **Conclusion:** The model successfully captures broad trends such as the negative impact of absences and the positive impact of study environment, but individual student performance inevitably involves personal factors not captured in this dataset.
+* **Conclusion:** The model successfully captures broad trends such as the negative impact of absences and the positive impact of study environment, but individual student performance inevitably involves personal factors not captured in this dataset.
 ---
 
 ## Screenshots
