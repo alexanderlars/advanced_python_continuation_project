@@ -302,6 +302,7 @@ def feature_fig(X: pd.DataFrame, model: LinearRegression) -> go.Figure:
 #%%
 
 def heatmap_fig(threshold: float, selected_features: list, df_clean: pd.DataFrame) -> go.Figure:
+
     """
     Creates a correlation heatmap for the selected features against G3.
     Correlations below the threshold are masked to 0 for clarity.
@@ -313,13 +314,15 @@ def heatmap_fig(threshold: float, selected_features: list, df_clean: pd.DataFram
 
     Returns:
         go.Figure: A heatmap visualization of the correlation matrix.
+
     """
+
     heatmap_cols = selected_features + ['G3'] 
     corr_matrix = df_clean[heatmap_cols].corr().round(2)
-    
+
     # Mask low correlations
     corr_matrix[corr_matrix.abs() < threshold] = 0
-    
+
     fig_corr = px.imshow(
         corr_matrix,
         text_auto=True,            
@@ -328,8 +331,9 @@ def heatmap_fig(threshold: float, selected_features: list, df_clean: pd.DataFram
         color_continuous_scale=['red', 'white', 'green'],
         zmin=-1, zmax=1            
     )
-    fig_corr.update_layout(height=800)
     
+    fig_corr.update_layout(height=800)
+
     return fig_corr
 #%%
 

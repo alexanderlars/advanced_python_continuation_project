@@ -22,7 +22,7 @@ Dependencies:
     - pandas: For data manipulation.
     - main: Local module containing ML logic (prepare_data, train_model, etc.).
 """
-
+#%%
 import webbrowser
 from threading import Timer
 from typing import List, Dict, Any, Tuple
@@ -43,7 +43,7 @@ from main import (
     feature_fig,
     heatmap_fig
 )
-
+#%%
 # --- Configuration ---
 pio.renderers.default = 'browser'
 HOST: str = 'localhost'
@@ -62,11 +62,8 @@ def open_browser(host: str = 'localhost', port: int = 8050) -> None:
     """
     webbrowser.open_new(f'http://{host}:{port}')
 
-
+#%%
 # --- Data Loading and Model Training ---
-# Note: These operations run at the module level to initialize the app state.
-# In a production environment with multiple workers, caching strategies
-# (like Flask-Caching) would be preferred over global variables.
 
 # Load dataset
 df = load_and_clean('student-mat.csv')
@@ -82,9 +79,9 @@ lin_reg, error, r2, y_test, y_pred = train_model(X_train, X_test, y_train, y_tes
 fig_model_accuracy = accuracy_fig(y_test, y_pred)
 fig_g3_dist = grade_fig(df)
 fig_features = feature_fig(X_train, lin_reg)
-fig_correlation = heatmap_fig(0.1, selected_features, df)
+fig_correlation = heatmap_fig(0.06,selected_features, df)
 
-
+#%%
 # --- Constants and Mappings ---
 
 feature_map: Dict[str, str] = {
@@ -135,7 +132,7 @@ feature_map: Dict[str, str] = {
     'Fjob': "Father's Job",
     'reason': "Reason for School Choice"
 }
-
+#%%
 # Calculate statistics for display
 stats_data: List[Tuple[str, float]] = [
     (feature_map['sex'] + " (Male)", df['sex'].mean() * 100),
@@ -150,7 +147,7 @@ stats_data: List[Tuple[str, float]] = [
     (feature_map['famsup'], df['famsup'].mean() * 100),
     (feature_map['paid'], df['paid'].mean() * 100)
 ]
-
+#%%
 # Identify excluded features for the "Excluded Features" list
 all_columns = [col for col in df.columns if col != 'G3']
 excluded_features = [col for col in all_columns if col not in selected_features]
@@ -162,7 +159,7 @@ list_items = [
     for col in excluded_features
 ]
 
-
+#%%
 # Variables available for the EDA dropdown
 eda_variables = [
     'sex', 'address', 'school', 'failures', 'Medu',
@@ -171,7 +168,7 @@ eda_variables = [
 eda_options = [{'label': feature_map.get(var, var), 'value': var} for var in eda_variables]
 
 
-# --- Helper Functions ---
+#%%# --- Helper Functions ---
 
 def create_input_group(label_text: str, d_id: str, d_options: List[Dict[str, Any]], d_value: Any) -> html.Div:
     """Creates a standardized input group containing a label and a dropdown.
@@ -191,7 +188,7 @@ def create_input_group(label_text: str, d_id: str, d_options: List[Dict[str, Any
         dcc.Dropdown(id=d_id, options=d_options, value=d_value)
     ], style={'marginBottom': '20px'})
 
-
+#%%
 # --- Dash Application Layout ---
 
 app = dash.Dash(__name__)
@@ -207,7 +204,6 @@ app.layout = html.Div(
         html.H1('Student Performance Analytics',
                 style={'textAlign': 'center', 'marginBottom': '40px'}),
 
-        # --- Exploratory Data Analysis Section ---
         html.Div([
             html.H2('Exploratory Data Analysis', style={'borderBottom': '2px solid green', 'paddingBottom': '10px'}),
             html.Label("Select a variable to analyze vs Grade:", style={'fontWeight': 'bold'}),
@@ -218,26 +214,33 @@ app.layout = html.Div(
                 clearable=False,
                 style={'marginBottom': '20px'}
             ),
+            html.P("This interactive box plot displays the distribution of grades for the selected category, showing medians, quartiles, and outliers.", style={'marginBottom': '10px'}),
             dcc.Graph(id='dynamic-eda-graph'),
-            html.H3("Overall Grade Distribution", style={'marginTop': '30px'}),
+            html.H3("Overall Grade Distribution", style={'borderBottom': '2px solid green','paddingBottom': '10px'}),
+            html.P("This histogram illustrates the frequency distribution of final grades across all students in the dataset.", style={'marginBottom': '10px'}),
             dcc.Graph(id='dist-graph', figure=fig_g3_dist),
+            
+            html.Div([
+                html.H3('Dataset Statistics', style={'borderBottom': '2px solid green', 'paddingBottom': '10px'}),
+                html.P("Overview of the data averages:"),
+                html.Ul(
+                    children=[
+                        html.Li([
+                            html.Strong(f"{label}: "), f"{value:.1f}%"
+                        ], style={'marginBottom': '8px', 'fontSize': '16px'})
+                        for label, value in stats_data
+                    ],
+                )
+            ], style={'marginBottom': '50px'}),
+            
+            html.H3("Correlation Heatmap", style={'marginTop': '30px','borderBottom': '2px solid green', 'paddingBottom': '10px'}),
+            html.P('This heatmap displays the correlations for the features that were actually kept in the model. By filtering out variables with weak connections (Pearson < 0.06), we get a cleaner view of the factors that actually drive student performance.', style={'marginBottom': '10px'}),
+            dcc.Graph(id='corr-graph', figure=fig_correlation),
+            
+            
         ], style={'marginBottom': '50px'}),
 
-        # --- Dataset Statistics Section ---
-        html.Div([
-            html.H2('Dataset Statistics', style={'borderBottom': '2px solid green', 'paddingBottom': '10px'}),
-            html.P("Overview of the data averages:"),
-            html.Ul(
-                children=[
-                    html.Li([
-                        html.Strong(f"{label}: "), f"{value:.1f}%"
-                    ], style={'marginBottom': '8px', 'fontSize': '16px'})
-                    for label, value in stats_data
-                ],
-            )
-        ], style={'marginBottom': '50px'}),
 
-        # --- Model Evaluation Section ---
         html.Div([
             html.H2('Model Evaluation', style={'borderBottom': '2px solid green', 'paddingBottom': '10px'}),
             html.Div([
@@ -250,18 +253,19 @@ app.layout = html.Div(
                 children=list_items,
                 style={'columnCount': 2, 'fontSize': '16px', 'padding': '20px'}
             ),
+            html.H3('Model Accuracy',style={'marginTop': '30px','borderBottom': '2px solid green', 'paddingBottom': '10px'}),
+            html.P("This scatter plot compares the actual grades against the predicted grades. Points closer to the diagonal red line indicate higher accuracy.", style={'marginBottom': '10px'}),
             dcc.Graph(id='accuracy-graph', figure=fig_model_accuracy),
+            html.H3('Model Feature Importances', style={'marginTop': '30px','borderBottom': '2px solid green', 'paddingBottom': '10px'}),
+            html.P("This chart displays feature importance based on standardized model coefficients. Since the data is scaled, the coefficient magnitude allows for a direct comparison of how strongly each variable affects the final grade.", style={'marginBottom': '10px'}),
             dcc.Graph(id='features-graph', figure=fig_features),
-            dcc.Graph(id='corr-graph', figure=fig_correlation),
         ], style={'marginBottom': '50px'}),
 
-        # --- Prediction Calculator Section ---
         html.Div([
             html.H2('Grade Calculator', style={'borderBottom': '2px solid green', 'paddingBottom': '10px'}),
             html.P("Enter student details below to predict the final math grade.", style={'marginBottom': '20px'}),
 
             html.Div([
-                # Column 1: Personal & Family
                 html.Div([
                     html.H3("Student & Family", style={'fontSize': '20px', 'color': 'green', 'borderBottom': '2px solid green', 'paddingBottom': '10px', 'marginBottom': '20px'}),
 
@@ -279,7 +283,6 @@ app.layout = html.Div(
 
                 ], style={'flex': 1, 'padding': '20px', 'minWidth': '300px', 'backgroundColor': '#f9f9f9', 'borderRadius': '10px'}),
 
-                # Column 2: Academic & Lifestyle
                 html.Div([
                     html.H3("Academic & Lifestyle", style={'fontSize': '20px', 'color': 'green', 'borderBottom': '2px solid green', 'paddingBottom': '10px', 'marginBottom': '20px'}),
 
@@ -314,7 +317,7 @@ app.layout = html.Div(
     ]
 )
 
-
+#%%
 # --- Callbacks ---
 
 @app.callback(
@@ -360,7 +363,7 @@ def update_graph(selected_variable: str) -> Any:
     )
 
     return fig
-
+#%%
 
 @app.callback(
     Output('respons', 'children'),
@@ -469,7 +472,7 @@ def calculate_grade(
 
     return "Enter your details and click Calculate."
 
-
+#%%
 # --- Main Execution Block ---
 
 if __name__ == '__main__':
