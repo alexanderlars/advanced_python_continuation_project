@@ -9,6 +9,7 @@ The project uses **Linear Regression** to identify the most important factors fo
 - [Project Overview](#project-overview)
 - [Data Source](#data-source)
 - [Methodology and Model Choices](#methodology-and-model-choices)
+- [Key Insights and Results](#key-insights-and-results)
 - [Screenshots](#screenshots)
 - [Installation and Usage](#installation-and-usage)
 
@@ -92,7 +93,7 @@ To prevent overfitting and reduce noise, we employed a correlation-based feature
 * **Preprocessing:** Since the dataset contains features with very different ranges (for example `absences` ranges from 0 to 93, while `studytime` ranges only from 1 to 4), unscaled linear regression coefficients would be misleading in a comparison. A unit change in "study time" is far more significant than a unit change in "absences". By applying `StandardScaler` ($z = \frac{x - \mu}{\sigma}$) the data is normalized to a mean of 0 and a standard deviation of 1. This ensures that the model coefficients represent the impact of a variable relative to its variance, making the coefficients comparable. This allows us to correctly rank features by importance, as seen in the **Model Feature Importance**.
 
 ---
-
+## Key Insights and Results
 After training the model and analyzing the feature importance, several interesting patterns and results emerged.
 
 ### 1. What matters most? (High Impact Features)
