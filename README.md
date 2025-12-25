@@ -169,4 +169,12 @@ pip install -r requirements.txt
 
 ```bash
 python app.py
+```
+
+
+---
+### Author
+**Alexander Larsnäs**
+
+*Project created for the Linc Advanced Python Workshop (HT 25).*
 
