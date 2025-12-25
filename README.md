@@ -101,7 +101,7 @@ The model identified **Extra educational support (`schoolsup`)** as the single s
 * **Negative Correlation:** There is a strong negative correlation between receiving educational support and the final grade. This is interpreted as a reactive indicator: students are assigned support *because* they are already struggling.
 * **Other Negative Factors:** As expected, variables such as past `failures`, high `absences`, and frequent going out (`goout`) negatively impact the grade.
 * **Positive Correlation:** Factors providing stability and resources showed positive effects. These include `studytime`, access to `internet`, and having a parent as a teacher (`Fjob_teacher`).
-    * *Note:* The model also identified the mother's job (e.g., in health) as a positive factor. Rather than a coincidence, this likely serves as a proxy for the family's socioeconomic status and educational background.
+    * *Note:* The model also identified the mother's job (for example in health) as a positive factor. Rather than a coincidence, this likely serves as a result of the family's socioeconomic status and educational background.
 
 ### 2. What matters less? (Low Impact Features)
 Surprisingly, some factors often assumed to be important showed little to no impact on the final grade in this dataset:
@@ -123,7 +123,7 @@ The model achieved an **$R^2$ score of 0.29** and a **MAE (Mean Absolute Error) 
 * **Context:** While an $R^2$ of 0.29 might seem low in physics or engineering, it is a reasonable result in social sciences when predicting complex human behavior solely based on demographics.
 * **Constraints:**  Itentionally, prior grades (`G1`, `G2`) were excluded to force the model to predict based on background factors rather than past performance. Without these historic data points, the unexplained variance is naturally higher.
 * **Qualitative Validation:** The model aligns well with educational theory, making logically sound predictions. It correctly identifies **absence** and **past failures** as significant negative drivers, while positively weighting factors such as **study time**, **parents' education**, and **moderated alcohol consumption**.
-* * **Conclusion:** The model successfully captures broad trends—such as the negative impact of absences and the positive impact of study environment, but individual student performance inevitably involves personal factors not captured in this dataset.
+* * **Conclusion:** The model successfully captures broad trends such as the negative impact of absences and the positive impact of study environment, but individual student performance inevitably involves personal factors not captured in this dataset.
 ---
 
 ## Screenshots
