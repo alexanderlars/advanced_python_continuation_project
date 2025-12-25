@@ -1,23 +1,22 @@
 # Student Performance Analytics Dashboard
 An interactive web application built to analyze student performance data and predict final math grades. This project was developed as part of the **Lund University Finance Society (LINC) Advanced Python Workshop (HT 25)**.
 
-The project uses **Linear Regression** to identify the most important factors for higher grades in maths and provides an model to estimate student grades based on demographic and lifestyle inputs.
+The project uses **Linear Regression** to identify the most important factors for higher grades in maths and provides a model to estimate student grades based on demographic and lifestyle inputs.
 
 ---
 
 ## Table of Contents
 - [Project Overview](#project-overview)
+- [Data Source](#data-source)
+- [Methodology and Model Choices](#methodology-and-model-choices)
 - [Screenshots](#screenshots)
+- [Installation and Usage](#installation-and-usage)
 
 ---
+
+
 ## Project Overview
 The goal of this project is to analyze the [UCI Student Performance Dataset](https://archive.ics.uci.edu/ml/datasets/student+performance) and answer the question: **"Can we predict a student's final math grade (G3) based on their background, lifestyle, and study habits, without relying on earlier grades?"**
-
-
-
-
-
-
 
 ## Data Source
 The dataset used is the **Student Performance Data Set** from the UCI Machine Learning Repository.
@@ -67,10 +66,37 @@ The dataset used is the **Student Performance Data Set** from the UCI Machine Le
 </details>
 
 
+## Methodology and Model Choices
+
+To create a strong model for a meaningful analysis, several defining choices were made for the project.
+
+### 1. Data Cleaning and Preprocessing
+Raw data processing is handled in `main.py`. The following choices were made:
+
+* **Handling Data Leakage:** The original dataset included grades for three periods `G1` (1st period) and `G2` (2nd period) and final grade (`G3`). The choice was made to **remove** `G1` and `G2` because of their very high correlation to `G3`, which would make the analysis boring and not give space for the other, more interesting parameters affecting the final grade.
+* **Target Variable Scaling:** The target variable `G3` (originally 0-20) was scaled to a percentage (0-100) to be more intuitive for dashboard users.
+* **Filtering:** Students with `G3 = 0` were **removed** as outliers. An unusual amount of students had grade with the value `0`, which diverged from the overall trend seen in the **Overall grade Distribution**. In the context of the Portuguese grading system, a score of 0 typically indicates a student who was **absent from the final exam** or dropped out, rather than a student who attempted the exam and demonstrated zero knowledge. Including these values could damage the model and by removing them (34 values) the R2-score was increased by 25.0% and the MAE decreased by 24.9%. 
+  
+* **Encoding:**
+    * Binary variables (e.g., `sex`, `romantic`) were mapped to 0/1.
+    * Categorical variables (e.g., `Mjob`, `reason`) were encoded using `pd.get_dummies` to allow the linear model to interpret them correctly.
+      
+### 2. Feature Selection Strategy
+To prevent overfitting and reduce noise, we employed a correlation-based feature selection method:
+* **Metric:** Pearson Correlation Coefficient ($r$).
+* **Threshold:** Features with an absolute correlation $|r| < 0.06$ with the target variable were excluded. The excluded features are shown in **Model Evaluation** and seem reasonable, e.g `guardian`, `nursery` or `famsize` should not affect the grade in any major way. The threshold was chosen experimentally to maximize the R2-score. Including variables with small correlation introduced noise that worsened model performance on the test set.
+
+### 3. Model Selection
+**Linear Regression** was selected as the primary model for this project.
+* **Justification:** The primary goal is *interpretability* and inference. We need to understand *how* specific factors (like study time or absences) impact the grade. Linear Regression provides clear coefficients that map directly to "points gained/lost," which is essential for the "Grade Calculator" feature in the dashboard.
+  
+* **Preprocessing:** Since the dataset contains features with very different ranges (e.g., `absences` ranging from 0 to 93, while `studytime` ranges only from 1 to 4), unscaled linear regression coefficients would be misleading in a comparison. A unit change in "study time" is far more significant than a unit change in "absences". By applying  ranges only fr ($z = \frac{x - \mu}{\sigma}$) the data is normalized to a mean of 0 and a standard deviation of 1. This ensures that the model coefficients represent the impact of a variable relative to its variance, making the coefficients comparable. This allows us to correctly rank features by importance, as seen in the **Model Feature Importance**.
+
+---
 
 ## Screenshots
 
-### 1. Exploratory Data Analysis (EDA) & Statistics
+### 1. Exploratory Data Analysis (EDA) and Statistics
 *Overview of the interactive dashboard, variable exploration, and dataset statistics.*
 
 ![EDA Overview](images/exploratory_data_analysis.png)
@@ -91,3 +117,26 @@ The dataset used is the **Student Performance Data Set** from the UCI Machine Le
 
 ![Calculator Tool](images/grade_calculator.png)
 ![Calculator with Input Values](images/grade_calculator_with_values.png)
+
+
+
+## Installation and Usage
+To run this application follow these steps:
+
+1. **Clone the repository:**
+   ```bash
+   git clone [https://github.com/alexanderlars/advanced_python_continuation_project.git](https://github.com/alexanderlars/advanced_python_continuation_project.git)
+   cd advanced_python_continuation_project
+ 
+2.**Install dependencies:**
+Make sure you have the required libraries installed.
+```bash
+pip install -r requirements.txt
+```
+3.**Run the application:**
+
+
+
+```bash
+python app.py
+
