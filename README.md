@@ -106,23 +106,23 @@ The model identified **Extra educational support (`schoolsup`)** as the single s
 ### 2. What matters less? (Low Impact Features)
 Surprisingly, some factors often assumed to be important showed little to no impact on the final grade in this dataset:
 * **Family Structure:** Variables such as family size (`famsize`) and the student's guardian (`guardian`) had negligible coefficients.
-* **Weekday Drinking:** Surprisingly, workday alcohol consumption (`Dalc`) showed a slightly positive (or negligible) correlation in this specific model iteration, contrary to the expected negative impact.
+* **Weekday Drinking:** Surprisingly, workday alcohol consumption (`Dalc`) showed a slightly positive (or negligible) correlation in this model, contrary to the expected negative impact.
 * **Extra Paid Classes:** Spending extra money on paid classes (`paid`) showed no significant effect on the final grade.
 * **Free Time:** The amount of reported free time also had surprisingly little impact on performance.
 
 ### 3. Reasonability of the Heatmap
 By observing the **Correlation Matrix**, several logical relationships confirm the quality of the data. (Note: The heatmap displays selected features to maintain readability).
-* **Parental Education:** `Medu` and `Fedu` are highly correlated, indicating that parents often share similar educational backgrounds.
-* **Ambition vs. Failure:** `higher` (wants higher education) and `failures` are negatively correlated, suggesting that students with past failures may lower their academic ambitions.
-* **Gender & Habits:** `sex` and `studytime` show a correlation, indicating gender-based differences in study habits within this cohort.
-* **Alcohol Consumption:** `Dalc` and `Walc` are highly correlated; students who consume alcohol on weekdays are likely to do so on weekends as well.
+* **Parental Education:** `Medu` and `Fedu` are highly correlated, indicating that parents often share similar education level.
+* **Ambition vs. Failure:** `higher` (wants higher education) and `failures` are negatively correlated, suggesting that students with past failures may lower their ambitions.
+* **Gender & Habits:** `sex` and `studytime` show a correlation, indicating gender-based differences in study habits within this datase.
+* **Alcohol Consumption:** `Dalc` and `Walc` are highly correlated, meaning students who consume alcohol on weekdays are likely to do so on weekends as well.
 * **Socializing & Drinking:** `goout` and `Walc` are positively correlated, linking social activity frequency to weekend alcohol consumption.
 
 ### 4. Model Performance
 The model achieved an **$R^2$ score of 0.29** and a **MAE (Mean Absolute Error) of 10.71**.
-* **Context:** While an $R^2$ of 0.29 might seem low in physics or engineering, it is a reasonable result in social sciences when predicting complex human behavior solely based on demographics.
+* **Context:** While an $R^2$ of 0.29 might seem low in other contexts, it is a reasonable result in social sciences when predicting complex human behavior only based on demographics.
 * **Constraints:**  Itentionally, prior grades (`G1`, `G2`) were excluded to force the model to predict based on background factors rather than past performance. Without these historic data points, the unexplained variance is naturally higher.
-* **Qualitative Validation:** The model aligns well with educational theory, making logically sound predictions. It correctly identifies **absence** and **past failures** as significant negative drivers, while positively weighting factors such as **study time**, **parents' education**, and **moderated alcohol consumption**.
+* **Qualitative Validation:** The model aligns well with intuition, making logically sound predictions. It correctly identifies **absence** and **past failures** as significant negative drivers, while identifing positive factors such as **study time**, **parents' education**, and **moderated alcohol consumption**.
 * * **Conclusion:** The model successfully captures broad trends such as the negative impact of absences and the positive impact of study environment, but individual student performance inevitably involves personal factors not captured in this dataset.
 ---
 
