@@ -25,7 +25,7 @@ The dataset used is the **Student Performance Data Set** from the UCI Machine Le
 * **Context:** The data attributes include student grades, demographic, social, and school-related features collected from two secondary schools in Portugal.
 
 <details>
-<summary><strong>Click here to view the full Data Dictionary (Variable Descriptions)</strong></summary>
+<summary><strong>View the full Data Dictionary (Variable Descriptions)</strong></summary>
 <br>
 
 | Variable | Description | Type/Range |
@@ -38,8 +38,8 @@ The dataset used is the **Student Performance Data Set** from the UCI Machine Le
 | **Pstatus** | Parent's cohabitation status | Binary: 'T' (Together) or 'A' (Apart) |
 | **Medu** | Mother's education | 0 (None) to 4 (Higher Education) |
 | **Fedu** | Father's education | 0 (None) to 4 (Higher Education) |
-| **Mjob** | Mother's job | Nominal (e.g., teacher, health, services) |
-| **Fjob** | Father's job | Nominal (e.g., teacher, health, services) |
+| **Mjob** | Mother's job | Nominal (teacher, health care, civil services, at home, other) |
+| **Fjob** | Father's job | Nominal (teacher, health care, civil services, at home, other) |
 | **reason** | Reason to choose this school | Nominal (home, reputation, course, other) |
 | **guardian** | Student's guardian | Nominal (mother, father, other) |
 | **traveltime** | Home to school travel time | 1 (<15 min) to 4 (>1 hour) |
@@ -60,9 +60,9 @@ The dataset used is the **Student Performance Data Set** from the UCI Machine Le
 | **Walc** | Weekend alcohol consumption | 1 (Very Low) to 5 (Very High) |
 | **health** | Current health status | 1 (Very Bad) to 5 (Very Good) |
 | **absences** | Number of school absences | Numeric: 0 to 93 |
-| **G1** | First period grade | *Excluded from model (Data Leakage)* |
-| **G2** | Second period grade | *Excluded from model (Data Leakage)* |
-| **G3** | Final grade (Target) | Numeric: 0 to 20 (Scaled to 0-100%) |
+| **G1** | First period grade | *Excluded from model* |
+| **G2** | Second period grade | *Excluded from model* |
+| **G3** | Final grade (Target) | Numeric: 0 to 20 (Scaled to 0-100) |
 
 </details>
 
