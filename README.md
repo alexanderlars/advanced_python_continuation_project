@@ -78,13 +78,13 @@ Raw data processing is handled in `main.py`. The following choices were made:
 * **Filtering:** Students with `G3 = 0` were **removed** as outliers. An unusual amount of students had grade with the value 0, which diverged from the overall trend seen in the **Overall grade Distribution**. In the context of the Portuguese grading system, a grade of 0 typically mean a student who was **absent from the final exam** or dropped out, rather than a student who attempted the exam and demonstrated zero knowledge. Including these values could damage the model and by removing them (34 values) the R2-score was increased by 25.0% and the MAE decreased by 24.9%. 
   
 * **Encoding:**
-    * Binary variables (e.g., `sex`, `romantic`) were mapped to 0/1.
-    * Categorical variables (e.g., `Mjob`, `reason`) were encoded using `pd.get_dummies` to allow the linear model to interpret them correctly.
+* **Binary variables** (for example `sex`, `romantic`) were mapped to 0/1.
+* **Categorical variables** (for example, `Mjob`, `reason`) were encoded using `pd.get_dummies` to allow the linear model to interpret them correctly.
       
 ### 2. Feature Selection Strategy
 To prevent overfitting and reduce noise, we employed a correlation-based feature selection method:
 * **Metric:** Pearson Correlation Coefficient ($r$).
-* **Threshold:** Features with an absolute correlation $|r| < 0.06$ with the target variable were excluded. The excluded features are shown in **Model Evaluation** and seem reasonable, e.g `guardian`, `nursery` or `famsize` should not affect the grade in any major way. The threshold was chosen experimentally to maximize the R2-score. Including variables with small correlation introduced noise that worsened model performance on the test set.
+* **Threshold:** Features with an absolute correlation $|r| < 0.06$ with the target variable were excluded. The excluded features are shown in **Model Evaluation** and seem reasonable, for example `guardian`, `nursery` or `famsize` should not affect the grade in any major way. The threshold was chosen experimentally to maximize the R2-score. Including variables with small correlation introduced noise that worsened model performance on the test set.
 
 ### 3. Model Selection
 **Linear Regression** was selected as the main model for this project.
